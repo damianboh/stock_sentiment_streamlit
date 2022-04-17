@@ -91,12 +91,12 @@ def plot_daily_sentiment(parsed_and_scored_news, ticker):
 finviz_url = 'https://finviz.com/quote.ashx?t='
 
 st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
-st.subheader("Bohmian's Stock News Sentiment Analyzer")
+st.header("Bohmian's Stock News Sentiment Analyzer")
 
 ticker = st.text_input('Enter Stock Ticker', '').upper()
 
 try:
-	st.write("Hourly and Daily Sentiment of {} Stock".format(ticker))
+	st.subheader("Hourly and Daily Sentiment of {} Stock".format(ticker))
 	news_table = get_news(ticker)
 	parsed_news_df = parse_news(news_table)
 	parsed_and_scored_news = score_news(parsed_news_df)
