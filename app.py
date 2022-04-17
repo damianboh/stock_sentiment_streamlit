@@ -13,8 +13,8 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 # for extracting data from finviz
 finviz_url = 'https://finviz.com/quote.ashx?t='
 
-st.set_page_config(layout = "wide")
-st.header("Bohmian's Stock News Sentiment Analyzer")
+st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
+st.subheader("Bohmian's Stock News Sentiment Analyzer")
 
 def get_news(ticker):
     url = finviz_url + ticker
@@ -94,25 +94,37 @@ def plot_daily_sentiment(parsed_and_scored_news, ticker):
     return fig # instead of using fig.show(), we return fig and turn it into a graphjson object for displaying in web page later
 
  
-ticker = st.text_input('Stock Ticker', 'TSLA').upper()
-st.write("Hourly and Daily Sentiment of {} Stock".format(ticker))
+ticker = st.text_input('Enter Stock Ticker', '').upper()
 
-news_table = get_news(ticker)
-parsed_news_df = parse_news(news_table)
-parsed_and_scored_news = score_news(parsed_news_df)
-fig_hourly = plot_hourly_sentiment(parsed_and_scored_news, ticker)
-fig_daily = plot_daily_sentiment(parsed_and_scored_news, ticker) 
- 
-st.plotly_chart(fig_hourly)
-st.plotly_chart(fig_daily)
+try:
+	st.write("Hourly and Daily Sentiment of {} Stock".format(ticker))
+	news_table = get_news(ticker)
+	parsed_news_df = parse_news(news_table)
+	parsed_and_scored_news = score_news(parsed_news_df)
+	fig_hourly = plot_hourly_sentiment(parsed_and_scored_news, ticker)
+	fig_daily = plot_daily_sentiment(parsed_and_scored_news, ticker) 
+	 
+	st.plotly_chart(fig_hourly)
+	st.plotly_chart(fig_daily)
 
-description = """
-	The above chart averages the sentiment scores of {} stock hourly and daily.
-	The table below gives each of the most recent headlines of the stock and the negative, neutral, positive and an aggregated sentiment score.
-	The news headlines are obtained from the FinViz website.
-	Sentiments are given by the nltk.sentiment.vader Python library.
-    """.format(ticker)
+	description = """
+		The above chart averages the sentiment scores of {} stock hourly and daily.
+		The table below gives each of the most recent headlines of the stock and the negative, neutral, positive and an aggregated sentiment score.
+		The news headlines are obtained from the FinViz website.
+		Sentiments are given by the nltk.sentiment.vader Python library.
+		""".format(ticker)
+		
+	st.write(description)	 
+	st.table(parsed_and_scored_news)
 	
-st.write(description)
- 
-st.table(parsed_and_scored_news)
+except:
+	st.write("Enter a correct stock ticker, e.g. 'AAPL' above and hit Enter.")	
+
+hide_streamlit_style = """
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style>
+
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
