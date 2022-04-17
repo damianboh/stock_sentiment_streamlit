@@ -10,12 +10,6 @@ import nltk
 nltk.downloader.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
-# for extracting data from finviz
-finviz_url = 'https://finviz.com/quote.ashx?t='
-
-st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
-st.subheader("Bohmian's Stock News Sentiment Analyzer")
-
 def get_news(ticker):
     url = finviz_url + ticker
     req = Request(url=url,headers={'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0'}) 
@@ -93,7 +87,12 @@ def plot_daily_sentiment(parsed_and_scored_news, ticker):
     fig = px.bar(mean_scores, x=mean_scores.index, y='sentiment_score', title = ticker + ' Daily Sentiment Scores')
     return fig # instead of using fig.show(), we return fig and turn it into a graphjson object for displaying in web page later
 
- 
+# for extracting data from finviz
+finviz_url = 'https://finviz.com/quote.ashx?t='
+
+st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
+st.subheader("Bohmian's Stock News Sentiment Analyzer")
+
 ticker = st.text_input('Enter Stock Ticker', '').upper()
 
 try:
@@ -125,6 +124,5 @@ hide_streamlit_style = """
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 </style>
-
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
