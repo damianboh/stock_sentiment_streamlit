@@ -1,0 +1,9 @@
+streamlit
+pandas
+nltk
+urllib3
+bs4
+plotly
+gunicorn
+
+
