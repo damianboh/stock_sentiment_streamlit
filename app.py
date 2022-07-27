@@ -14,6 +14,8 @@ import subprocess
 from sqlalchemy.engine.create import create_engine
 from datetime import datetime
 from sqlalchemy.types import Integer, DateTime
+import os
+ELEPHANT_DB_URL = os.environ.get('ELEPHANT_DB_URL')
 
 st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
 
