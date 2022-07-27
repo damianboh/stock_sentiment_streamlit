@@ -10,6 +10,19 @@ import nltk
 nltk.downloader.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
+import subprocess
+from sqlalchemy.engine.create import create_engine
+from datetime import datetime
+from sqlalchemy.types import Integer, DateTime
+
+st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
+
+@st.experimental_singleton
+def conn_db():
+	return create_engine(ELEPHANT_DB_URL)
+	
+engine = conn_db()
+
 def get_news(ticker):
     url = finviz_url + ticker
     req = Request(url=url,headers={'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0'}) 
@@ -90,10 +103,23 @@ def plot_daily_sentiment(parsed_and_scored_news, ticker):
 # for extracting data from finviz
 finviz_url = 'https://finviz.com/quote.ashx?t='
 
-st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
+
 st.header("Bohmian's Stock News Sentiment Analyzer")
 
 ticker = st.text_input('Enter Stock Ticker', '').upper()
+
+df = pd.DataFrame({'datetime': datetime.now(), 'ticker': ticker}, index = [0])
+
+if ticker != '':
+	df.to_sql(
+		"stocksentimentdashboard",  # table name
+		con=engine,
+		if_exists='append',
+		index=False,  # In order to avoid writing DataFrame index as a column
+		dtype={
+			"datetime": DateTime()
+		}
+	)
 
 try:
 	st.subheader("Hourly and Daily Sentiment of {} Stock".format(ticker))
