@@ -56,14 +56,14 @@ def parse_news(news_table):
         except:
             pass
 			
-		# Set column names
-        columns = ['date', 'time', 'headline']
-        # Convert the parsed_news list into a DataFrame called 'parsed_and_scored_news'
-        parsed_news_df = pd.DataFrame(parsed_news, columns=columns)        
-        # Create a pandas datetime object from the strings in 'date' and 'time' column
-        parsed_news_df['datetime'] = pd.to_datetime(parsed_news_df['date'] + ' ' + parsed_news_df['time'])
+    # Set column names
+    columns = ['date', 'time', 'headline']
+    # Convert the parsed_news list into a DataFrame called 'parsed_and_scored_news'
+    parsed_news_df = pd.DataFrame(parsed_news, columns=columns)        
+    # Create a pandas datetime object from the strings in 'date' and 'time' column
+    parsed_news_df['datetime'] = pd.to_datetime(parsed_news_df['date'] + ' ' + parsed_news_df['time'])
 			
-        return parsed_news_df
+    return parsed_news_df
         
     
         
