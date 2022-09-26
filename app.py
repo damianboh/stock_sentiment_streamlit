@@ -32,9 +32,9 @@ def parse_news(news_table):
     parsed_news = []
     
     for x in news_table.findAll('tr'):
-		# occasionally x (below) may be None when the html table is poorly formatted, skip it in try except instead of throwing an error and exiting
-		# may also use an if loop here to check if x is None first	
-		try:
+        # occasionally x (below) may be None when the html table is poorly formatted, skip it in try except instead of throwing an error and exiting
+        # may also use an if loop here to check if x is None first	
+        try:
 			# read the text from each tr tag into text
 			# get text from a only
 			text = x.a.get_text() 
