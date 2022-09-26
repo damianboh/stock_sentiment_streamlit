@@ -43,8 +43,7 @@ def parse_news(news_table):
             # if the length of 'date_scrape' is 1, load 'time' as the only element
 
             if len(date_scrape) == 1:
-                time = date_scrape[0]
-				
+                time = date_scrape[0]				
 			# else load 'date' as the 1st element and 'time' as the second    
             else:
                 date = date_scrape[0]
@@ -52,15 +51,17 @@ def parse_news(news_table):
 			
             # Append ticker, date, time and headline as a list to the 'parsed_news' list
             parsed_news.append([date, time, text])        
-            # Set column names
-            columns = ['date', 'time', 'headline']
-            # Convert the parsed_news list into a DataFrame called 'parsed_and_scored_news'
-            parsed_news_df = pd.DataFrame(parsed_news, columns=columns)        
-            # Create a pandas datetime object from the strings in 'date' and 'time' column
-            parsed_news_df['datetime'] = pd.to_datetime(parsed_news_df['date'] + ' ' + parsed_news_df['time'])
+            
             
         except:
             pass
+			
+		# Set column names
+        columns = ['date', 'time', 'headline']
+        # Convert the parsed_news list into a DataFrame called 'parsed_and_scored_news'
+        parsed_news_df = pd.DataFrame(parsed_news, columns=columns)        
+        # Create a pandas datetime object from the strings in 'date' and 'time' column
+        parsed_news_df['datetime'] = pd.to_datetime(parsed_news_df['date'] + ' ' + parsed_news_df['time'])
 			
         return parsed_news_df
         
