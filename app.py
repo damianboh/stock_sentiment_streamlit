@@ -11,9 +11,7 @@ nltk.downloader.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 import subprocess
-from sqlalchemy.engine.create import create_engine
 from datetime import datetime
-from sqlalchemy.types import Integer, DateTime
 import os
 
 st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
