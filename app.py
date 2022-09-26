@@ -60,7 +60,7 @@ def parse_news(news_table):
             parsed_news_df['datetime'] = pd.to_datetime(parsed_news_df['date'] + ' ' + parsed_news_df['time'])
         except:
         
-    return parsed_news_df
+	return parsed_news_df
         
 def score_news(parsed_news_df):
     # Instantiate the sentiment intensity analyzer
