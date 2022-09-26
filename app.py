@@ -108,9 +108,9 @@ df = pd.DataFrame({'datetime': datetime.now(), 'ticker': ticker}, index = [0])
 try:
 	st.subheader("Hourly and Daily Sentiment of {} Stock".format(ticker))
 	news_table = get_news(ticker)
-	print(news_table)
 	parsed_news_df = parse_news(news_table)
 	parsed_and_scored_news = score_news(parsed_news_df)
+	print(parsed_and_scored_news)
 	fig_hourly = plot_hourly_sentiment(parsed_and_scored_news, ticker)
 	fig_daily = plot_daily_sentiment(parsed_and_scored_news, ticker) 
 	 
