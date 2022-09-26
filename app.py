@@ -35,30 +35,30 @@ def parse_news(news_table):
         # occasionally x (below) may be None when the html table is poorly formatted, skip it in try except instead of throwing an error and exiting
         # may also use an if loop here to check if x is None first	
         try:
-			# read the text from each tr tag into text
-			# get text from a only
-			text = x.a.get_text() 
-			# splite text in the td tag into a list 
-			date_scrape = x.td.text.split()
-			# if the length of 'date_scrape' is 1, load 'time' as the only element
+            # read the text from each tr tag into text
+            # get text from a only
+            text = x.a.get_text() 
+            # splite text in the td tag into a list 
+            date_scrape = x.td.text.split()
+            # if the length of 'date_scrape' is 1, load 'time' as the only element
 
-			if len(date_scrape) == 1:
-				time = date_scrape[0]
+            if len(date_scrape) == 1:
+                time = date_scrape[0]
 				
 			# else load 'date' as the 1st element and 'time' as the second    
-			else:
-				date = date_scrape[0]
-				time = date_scrape[1]
+            else:
+                date = date_scrape[0]
+                time = date_scrape[1]
 			
-			# Append ticker, date, time and headline as a list to the 'parsed_news' list
-			parsed_news.append([date, time, text])        
-			# Set column names
-			columns = ['date', 'time', 'headline']
-			# Convert the parsed_news list into a DataFrame called 'parsed_and_scored_news'
-			parsed_news_df = pd.DataFrame(parsed_news, columns=columns)        
-			# Create a pandas datetime object from the strings in 'date' and 'time' column
-			parsed_news_df['datetime'] = pd.to_datetime(parsed_news_df['date'] + ' ' + parsed_news_df['time'])
-		except:
+            # Append ticker, date, time and headline as a list to the 'parsed_news' list
+            parsed_news.append([date, time, text])        
+            # Set column names
+            columns = ['date', 'time', 'headline']
+            # Convert the parsed_news list into a DataFrame called 'parsed_and_scored_news'
+            parsed_news_df = pd.DataFrame(parsed_news, columns=columns)        
+            # Create a pandas datetime object from the strings in 'date' and 'time' column
+            parsed_news_df['datetime'] = pd.to_datetime(parsed_news_df['date'] + ' ' + parsed_news_df['time'])
+        except:
         
     return parsed_news_df
         
