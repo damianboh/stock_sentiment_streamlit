@@ -15,15 +15,9 @@ from sqlalchemy.engine.create import create_engine
 from datetime import datetime
 from sqlalchemy.types import Integer, DateTime
 import os
-ELEPHANT_DB_URL = os.environ.get('ELEPHANT_DB_URL')
 
 st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
 
-@st.experimental_singleton
-def conn_db():
-	return create_engine(ELEPHANT_DB_URL)
-	
-engine = conn_db()
 
 def get_news(ticker):
     url = finviz_url + ticker
@@ -112,16 +106,6 @@ ticker = st.text_input('Enter Stock Ticker', '').upper()
 
 df = pd.DataFrame({'datetime': datetime.now(), 'ticker': ticker}, index = [0])
 
-if ticker != '':
-	df.to_sql(
-		"stocksentimentdashboard",  # table name
-		con=engine,
-		if_exists='append',
-		index=False,  # In order to avoid writing DataFrame index as a column
-		dtype={
-			"datetime": DateTime()
-		}
-	)
 
 try:
 	st.subheader("Hourly and Daily Sentiment of {} Stock".format(ticker))
@@ -144,7 +128,8 @@ try:
 	st.write(description)	 
 	st.table(parsed_and_scored_news)
 	
-except:
+except Exception as e:
+	print(e)
 	st.write("Enter a correct stock ticker, e.g. 'AAPL' above and hit Enter.")	
 
 hide_streamlit_style = """
