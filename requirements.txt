@@ -5,5 +5,4 @@ urllib3
 bs4
 plotly
 gunicorn
-sqlalchemy
 psycopg2-binary
