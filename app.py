@@ -127,7 +127,7 @@ try:
 	st.table(parsed_and_scored_news)
 	
 except Exception as e:
-	print(e)
+	print(str(e))
 	st.write("Enter a correct stock ticker, e.g. 'AAPL' above and hit Enter.")	
 
 hide_streamlit_style = """
