@@ -119,6 +119,7 @@ try:
 	st.subheader("Hourly and Daily Sentiment of {} Stock".format(ticker))
 	news_table = get_news(ticker)
 	parsed_news_df = parse_news(news_table)
+	st.write(news_table)
 	print(parsed_news_df)
 	parsed_and_scored_news = score_news(parsed_news_df)
 	fig_hourly = plot_hourly_sentiment(parsed_and_scored_news, ticker)
