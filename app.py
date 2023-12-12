@@ -11,8 +11,9 @@ nltk.downloader.download('vader_lexicon')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 import subprocess
-from datetime import datetime
 import os
+
+import datetime
 
 st.set_page_config(page_title = "Bohmian's Stock News Sentiment Analyzer", layout = "wide")
 
@@ -30,10 +31,9 @@ def get_news(ticker):
 # parse news into dataframe
 def parse_news(news_table):
     parsed_news = []
+    today_string = datetime.datetime.today().strftime('%Y-%m-%d')
     
     for x in news_table.findAll('tr'):
-        # occasionally x (below) may be None when the html table is poorly formatted, skip it in try except instead of throwing an error and exiting
-        # may also use an if loop here to check if x is None first	
         try:
             # read the text from each tr tag into text
             # get text from a only
@@ -43,26 +43,26 @@ def parse_news(news_table):
             # if the length of 'date_scrape' is 1, load 'time' as the only element
 
             if len(date_scrape) == 1:
-                time = date_scrape[0]				
-			# else load 'date' as the 1st element and 'time' as the second    
+                time = date_scrape[0]
+                
+            # else load 'date' as the 1st element and 'time' as the second    
             else:
                 date = date_scrape[0]
                 time = date_scrape[1]
-			
+            
             # Append ticker, date, time and headline as a list to the 'parsed_news' list
-            parsed_news.append([date, time, text])        
-            
-            
+            parsed_news.append([date, time, text]) 
         except:
             pass
-			
-    # Set column names
-    columns = ['date', 'time', 'headline']
-    # Convert the parsed_news list into a DataFrame called 'parsed_and_scored_news'
-    parsed_news_df = pd.DataFrame(parsed_news, columns=columns)        
-    # Create a pandas datetime object from the strings in 'date' and 'time' column
-    parsed_news_df['datetime'] = pd.to_datetime(parsed_news_df['date'] + ' ' + parsed_news_df['time'])
-			
+        
+        # Set column names
+        columns = ['date', 'time', 'headline']
+        # Convert the parsed_news list into a DataFrame called 'parsed_and_scored_news'
+        parsed_news_df = pd.DataFrame(parsed_news, columns=columns)        
+        # Create a pandas datetime object from the strings in 'date' and 'time' column
+        parsed_news_df['date'] = parsed_news_df['date'].replace("Today", today_string)
+        parsed_news_df['datetime'] = pd.to_datetime(parsed_news_df['date'] + ' ' + parsed_news_df['time'])
+        
     return parsed_news_df
         
     
@@ -78,19 +78,20 @@ def score_news(parsed_news_df):
     scores_df = pd.DataFrame(scores)
 
     # Join the DataFrames of the news and the list of dicts
-    parsed_and_scored_news = parsed_news_df.join(scores_df, rsuffix='_right')             
+    parsed_and_scored_news = parsed_news_df.join(scores_df, rsuffix='_right')        
     parsed_and_scored_news = parsed_and_scored_news.set_index('datetime')    
     parsed_and_scored_news = parsed_and_scored_news.drop(['date', 'time'], 1)          
     parsed_and_scored_news = parsed_and_scored_news.rename(columns={"compound": "sentiment_score"})
 
     return parsed_and_scored_news
 
+
 def plot_hourly_sentiment(parsed_and_scored_news, ticker):
    
     # Group by date and ticker columns from scored_news and calculate the mean
     mean_scores = parsed_and_scored_news.resample('H').mean()
 
-    # Plot a bar chart with plotly
+    # Plot a bar chart with plotly 
     fig = px.bar(mean_scores, x=mean_scores.index, y='sentiment_score', title = ticker + ' Hourly Sentiment Scores')
     return fig # instead of using fig.show(), we return fig and turn it into a graphjson object for displaying in web page later
 
@@ -111,7 +112,7 @@ st.header("Bohmian's Stock News Sentiment Analyzer")
 
 ticker = st.text_input('Enter Stock Ticker', '').upper()
 
-df = pd.DataFrame({'datetime': datetime.now(), 'ticker': ticker}, index = [0])
+df = pd.DataFrame({'datetime': datetime.datetime.now(), 'ticker': ticker}, index = [0])
 
 
 try:
